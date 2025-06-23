@@ -1,5 +1,5 @@
 import { Rocket, PenLine } from "lucide-react";
-import Navbar from "../components/Navbar.jsx"; // This is your Sidebar
+import Navbar from "../components/navbar.jsx"; // This is your Sidebar
 import abstract from "../media/rm.png";
 
 const HomePage = () => {

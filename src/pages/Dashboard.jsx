@@ -9,7 +9,7 @@ import {
   PenLine,
   X,
 } from "lucide-react";
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../components/navbar.jsx";
 import { useState } from "react";
 
 const Dashboard = (props) => {
