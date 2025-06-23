@@ -8,7 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../firebase";
 import { ShieldCheck, Mail, LockKeyhole, UserPlus } from "lucide-react";
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../components/navbar.jsx";
 
 const Register = () => {
   const [email, setEmail] = useState("");

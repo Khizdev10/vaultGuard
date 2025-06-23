@@ -3,7 +3,7 @@ import { LogIn, Mail, LockKeyhole } from "lucide-react";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../components/navbar.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState("");
