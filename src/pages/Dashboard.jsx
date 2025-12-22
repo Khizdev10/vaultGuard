@@ -10,18 +10,22 @@ import {
   X,
 } from "lucide-react";
 import Navbar from "../components/navbar.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Dashboard = (props) => {
   const credentials = props.credentials || [];
   const [revealedPasswords, setRevealedPasswords] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [editingCredentialId, setEditingCredentialId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState({
     website: "",
     email: "",
     password: "",
   });
+
+  const [filtered, setFiltered] = useState([]);
+
 
   const togglePasswordVisibility = (id) => {
     setRevealedPasswords((prev) => ({
@@ -82,6 +86,19 @@ const Dashboard = (props) => {
     }
   };
 
+  useEffect(() => {
+    console.log("searchQuery", searchQuery)
+    setFiltered(credentials)
+  }, [credentials])
+
+  useEffect(() => {
+    console.log("Filtered", filtered)
+  }, [filtered])
+
+  useEffect(() => {
+    console.log("searchQuery", searchQuery)
+    setFiltered(credentials.filter((cred)=>cred.website.toLowerCase().includes(searchQuery.toLowerCase())))
+  }, [searchQuery])
   return (
     <div className="flex min-h-screen bg-gray-900 text-white">
       <Navbar />
@@ -92,13 +109,19 @@ const Dashboard = (props) => {
             <Lock size={26} />
             Vault
           </h1>
-          <button
-            onClick={openAddModal}
-            className="bg-green-700 hover:bg-green-800 transition text-white py-2 px-4 rounded-lg font-medium flex items-center gap-2 hover:scale-105"
-          >
-            <PenLine size={18} />
-            Add
-          </button>
+          <div className="flex justify-evenly items-center ">
+            <input type="text" placeholder="Search" className="p-2 border bg-gray-800 border-gray-700"
+              onChange={(e) => {
+                setSearchQuery(e.target.value)
+              }} />
+            <button
+              onClick={openAddModal}
+              className="bg-green-700 hover:bg-green-800 transition text-white py-2 px-4  font-medium flex items-center gap-2 hover:scale-105"
+            >
+              <PenLine size={18} />
+              Add
+            </button>
+          </div>
         </div>
 
         {/* Modal */}
@@ -158,81 +181,82 @@ const Dashboard = (props) => {
 
         {/* Credential Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {credentials.length === 0 ? (
-  <div className="flex flex-1 items-center  justify-center h-[60vh] w-full text-gray-400 text-lg"
-  style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)"}}>
-    No credentials added . . .
-  </div>
-) : (
-  credentials.map((cred) => (
-    <div
-      key={cred.id}
-      className="bg-gray-850 rounded-xl p-6 transition-all duration-200 border border-gray-700 shadow-md hover:shadow-green-700/30 hover:-translate-y-1"
-    >
-      <div className="flex items-center mb-4">
-        <div className="bg-gray-700 p-3 rounded-full mr-3">
-          <Globe size={20} />
-        </div>
-        <div>
-          <h3 className="font-semibold text-lg">{cred.website}</h3>
-          <p className="text-gray-400 text-xs">{cred.date}</p>
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        <div>
-          <p className="text-gray-400 text-sm">Email</p>
-          <div className="flex items-center bg-gray-700 rounded px-3 py-2 mt-1 text-sm">
-            <Mail size={16} className="text-gray-400 mr-2" />
-            {cred.username}
-          </div>
-        </div>
-
-        <div>
-          <p className="text-gray-400 text-sm">Password</p>
-          <div className="flex items-center justify-between bg-gray-700 rounded px-3 py-2 mt-1 text-sm">
-            <div className="flex items-center">
-              <Lock size={16} className="text-gray-400 mr-2" />
-              {revealedPasswords[cred.id] ? cred.password : "••••••••"}
+          {credentials.length === 0 ? (
+            <div className="flex flex-1 items-center  justify-center h-[60vh] w-full text-gray-400 text-lg"
+              style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}>
+              No credentials added . . .
             </div>
-            <button
-              onClick={() => togglePasswordVisibility(cred.id)}
-              className="text-gray-400 hover:text-white"
-            >
-              {revealedPasswords[cred.id] ? (
-                <EyeOff size={16} />
-              ) : (
-                <Eye size={16} />
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
+          ) : (
+            filtered.map((cred) => (
+              <div
+                key={cred.id}
+                className="bg-gray-850 rounded-xl p-6 transition-all duration-200 border border-gray-700 shadow-md hover:shadow-green-700/30 hover:-translate-y-1"
+              >
+                <div className="flex items-center mb-4">
+                  <div className="bg-gray-700 p-3 rounded-full mr-3">
+                    <Globe size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">{cred.website}</h3>
+                    <p className="text-gray-400 text-xs">{cred.date}</p>
+                  </div>
+                </div>
 
-      <div className="flex justify-end mt-4 gap-3">
-        <button
-          onClick={() => openEditModal(cred)}
-          className="text-gray-400 hover:text-green-500 transition"
-        >
-          <PenLine size={18} />
-        </button>
-        <button
-          onClick={() => handleDelete(cred.id)}
-          className="text-gray-400 hover:text-red-500 transition"
-        >
-          <Trash2 size={18} />
-        </button>
-      </div>
-    </div>
-  ))
-)}
- 
-          
-         
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-gray-400 text-sm">Email</p>
+                    <div className="flex items-center bg-gray-700 rounded px-3 py-2 mt-1 text-sm">
+                      <Mail size={16} className="text-gray-400 mr-2" />
+                      {cred.username}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-400 text-sm">Password</p>
+                    <div className="flex items-center justify-between bg-gray-700 rounded px-3 py-2 mt-1 text-sm">
+                      <div className="flex items-center">
+                        <Lock size={16} className="text-gray-400 mr-2" />
+                        {revealedPasswords[cred.id] ? cred.password : "••••••••"}
+                      </div>
+                      <button
+                        onClick={() => togglePasswordVisibility(cred.id)}
+                        className="text-gray-400 hover:text-white"
+                      >
+                        {revealedPasswords[cred.id] ? (
+                          <EyeOff size={16} />
+                        ) : (
+                          <Eye size={16} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end mt-4 gap-3">
+                  <button
+                    onClick={() => openEditModal(cred)}
+                    className="text-gray-400 hover:text-green-500 transition"
+                  >
+                    <PenLine size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(cred.id)}
+                    className="text-gray-400 hover:text-red-500 transition"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+
+
+
         </div>
       </main>
     </div>
   );
+
 };
 
 export default Dashboard;
