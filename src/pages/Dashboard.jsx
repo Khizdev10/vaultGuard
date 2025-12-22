@@ -115,7 +115,7 @@ const Dashboard = (props) => {
               }} />
             <button
               onClick={openAddModal}
-              className="bg-green-700 rounded-md hover:bg-green-800 transition text-white py-2 px-4  font-medium flex items-center gap-2 hover:scale-105"
+              className="bg-gray-700 rounded-md hover:bg-gray-800 transition text-white py-2 px-4  font-medium flex items-center gap-2 "
             >
               <PenLine size={18} />
               Add
@@ -183,7 +183,7 @@ const Dashboard = (props) => {
           {credentials.length === 0 ? (
             <div className="flex flex-1 items-center  justify-center h-[60vh] w-full text-gray-400 text-lg"
               style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}>
-              No credentials added . . .
+          Loading ....
             </div>
           ) : (
             filtered.map((cred) => (
