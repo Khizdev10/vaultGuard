@@ -104,24 +104,23 @@ const Dashboard = (props) => {
       <Navbar />
 
       <main className="flex-1 p-6 md:p-10" style={{ paddingLeft: "65px" }}>
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-8 flex-wrap">
           <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2">
             <Lock size={26} />
             Vault
           </h1>
-          <div className="flex justify-evenly items-center ">
-            <input type="text" placeholder="Search" className="p-2 border bg-gray-800 border-gray-700"
+            <input type="text" placeholder="Search..." className="p-2 border bg-gray-800 border-gray-700 rounded-md w-1/2"
               onChange={(e) => {
                 setSearchQuery(e.target.value)
               }} />
             <button
               onClick={openAddModal}
-              className="bg-green-700 hover:bg-green-800 transition text-white py-2 px-4  font-medium flex items-center gap-2 hover:scale-105"
+              className="bg-green-700 rounded-md hover:bg-green-800 transition text-white py-2 px-4  font-medium flex items-center gap-2 hover:scale-105"
             >
               <PenLine size={18} />
               Add
             </button>
-          </div>
+         
         </div>
 
         {/* Modal */}
