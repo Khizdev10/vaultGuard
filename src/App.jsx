@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 function App() {
   const [user, setUser] = useState(null);
   const [credentials, setCredentials] = useState(null);
+  const [Loading, setLoading] = useState(true);
 
   // ✅ Save new credential
   const save_info = async (website, email, password) => {
@@ -96,6 +97,7 @@ function App() {
   useEffect(() => {
     const fetchCredentials = async () => {
       if (!user) return;
+      
 
       try {
         const credentialsRef = collection(db, "vault_entries");
@@ -111,6 +113,7 @@ function App() {
       } catch (error) {
         console.error("Error fetching credentials:", error);
       }
+      setLoading(false);
     };
 
     fetchCredentials();
@@ -131,6 +134,8 @@ function App() {
               save_info={save_info}
               deleteCredential={deleteCredential}
               updateCredential={updateCredential}
+              Loading={Loading}
+              // setLoading={setLoading}
             />
           }
         />

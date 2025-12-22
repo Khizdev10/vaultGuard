@@ -14,10 +14,12 @@ import { useState, useEffect } from "react";
 
 const Dashboard = (props) => {
   const credentials = props.credentials || [];
+  const Loading = props.Loading;
   const [revealedPasswords, setRevealedPasswords] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [editingCredentialId, setEditingCredentialId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  // const [Loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     website: "",
     email: "",
@@ -25,7 +27,7 @@ const Dashboard = (props) => {
   });
 
   const [filtered, setFiltered] = useState([]);
-
+  // const setLoading = props.setLoading;
 
   const togglePasswordVisibility = (id) => {
     setRevealedPasswords((prev) => ({
@@ -89,16 +91,23 @@ const Dashboard = (props) => {
   useEffect(() => {
     console.log("searchQuery", searchQuery)
     setFiltered(credentials)
+
   }, [credentials])
 
   useEffect(() => {
     console.log("Filtered", filtered)
+    // setLoading(false)
   }, [filtered])
 
   useEffect(() => {
     console.log("searchQuery", searchQuery)
-    setFiltered(credentials.filter((cred)=>cred.website.toLowerCase().includes(searchQuery.toLowerCase())))
+    setFiltered(credentials.filter((cred) => cred.website.toLowerCase().includes(searchQuery.toLowerCase())))
   }, [searchQuery])
+
+  useEffect(() => {
+    console.log("Loading", Loading);
+    // setLoading(false)
+  }, [credentials])
   return (
     <div className="flex min-h-screen bg-gray-900 text-white">
       <Navbar />
@@ -109,18 +118,18 @@ const Dashboard = (props) => {
             <Lock size={26} />
             Vault
           </h1>
-            <input type="text" placeholder="Search..." className="p-2 border bg-gray-800 border-gray-700 rounded-md w-1/2"
-              onChange={(e) => {
-                setSearchQuery(e.target.value)
-              }} />
-            <button
-              onClick={openAddModal}
-              className="bg-gray-700 rounded-md hover:bg-gray-800 transition text-white py-2 px-4  font-medium flex items-center gap-2 "
-            >
-              <PenLine size={18} />
-              Add
-            </button>
-         
+          <input type="text" placeholder="Search..." className="p-2 border bg-gray-800 border-gray-700 rounded-md w-1/2"
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+            }} />
+          <button
+            onClick={openAddModal}
+            className="bg-gray-700 rounded-md hover:bg-gray-800 transition text-white py-2 px-4  font-medium flex items-center gap-2 "
+          >
+            <PenLine size={18} />
+            Add
+          </button>
+
         </div>
 
         {/* Modal */}
@@ -180,10 +189,13 @@ const Dashboard = (props) => {
 
         {/* Credential Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {credentials.length === 0 ? (
-            <div className="flex flex-1 items-center  justify-center h-[60vh] w-full text-gray-400 text-lg"
-              style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}>
-          Loading ....
+          {Loading ? (
+            <div className="col-span-full flex items-center justify-center h-[60vh] text-gray-400 text-lg">
+              Loading...
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="col-span-full flex items-center justify-center h-[60vh] text-gray-400 text-lg">
+              No credentials yet. Click “Add” to create one.
             </div>
           ) : (
             filtered.map((cred) => (
