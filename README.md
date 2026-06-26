@@ -2,6 +2,8 @@
 
 **VaultGuard** is a secure, modern password manager built with **React** and **Firebase**. Users can log in using Google or email/password, and manage their saved credentials — all stored securely in Firestore with real-time syncing.
 
+
+
 ---
 
 ## 🌟 Features
